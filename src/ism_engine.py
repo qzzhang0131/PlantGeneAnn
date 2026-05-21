@@ -40,6 +40,7 @@ class PlantGeneAnnISMEngine:
         )
         model.eval()
         self.model = self.accelerator.prepare(model)
+        
         self.genome = SeqIO.index(self.fasta_file, "fasta")
         
         self.rule1 = {'A': 'T', 'T': 'A', 'C': 'G', 'G': 'C'}
