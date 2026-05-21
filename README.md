@@ -1,20 +1,20 @@
-# PlantGenoAnn: Plant Genome Annotation Model
+# PlantGeneAnn: Plant Genome Annotation Model
 
-[![Hugging Face Model](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Models-yellow)](https://huggingface.co/qzzhang/PlantGenoANN)
+[![Hugging Face Model](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Models-yellow)](https://huggingface.co/qzzhang/PlantGeneAnn)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
 ## 📖 Introduction
-**PlantGenoAnn** is a plant genomic segmentation model designed for predicting genomic elements at single-nucleotide resolution. It is available in two variants: **PlantGenoAnn-model-plants** (trained on 9 model plants) and **PlantGenoAnn-multi-species** (trained on 42 plant species). We recommend using PlantGenoAnn-model-plants for genomic predictions.
+**PlantGeneAnn** is a plant genomic segmentation model designed for predicting genomic elements at single-nucleotide resolution. It is available in two variants: **PlantGeneAnn-model-plants** (trained on 9 model plants) and **PlantGeneAnn-multi-species** (trained on 42 plant species). We recommend using PlantGeneAnn-model-plants for genomic predictions.
 
-Built upon the **[PlantBiMoE](https://github.com/HUST-Keep-Lin/PlantBiMoE)** architecture with a 1D U-Net segmentation head, it automates the prediction of gene structures—including genes, CDSs, and exons—on both forward and reverse strands. Beyond standard annotation, PlantGenoAnn serves as a **long-context plant genomic foundation model** (up to 49,152 bp), adaptable via fine-tuning to predict diverse omic signal tracks such as RNA-seq and ATAC-seq.
+Built upon the **[PlantBiMoE](https://github.com/HUST-Keep-Lin/PlantBiMoE)** architecture with a 1D U-Net segmentation head, it automates the prediction of gene structures—including genes, CDSs, and exons—on both forward and reverse strands. Beyond standard annotation, PlantGeneAnn serves as a **long-context plant genomic foundation model** (up to 49,152 bp), adaptable via fine-tuning to predict diverse omic signal tracks such as RNA-seq and ATAC-seq.
 
 
 ## 🤗 Model Access
-The pre-trained weights for **PlantGenoAnn-model-plants** and **PlantGenoAnn-multi-species** are hosted on Hugging Face:
+The pre-trained weights for **PlantGeneAnn-model-plants** and **PlantGeneAnn-multi-species** are hosted on Hugging Face:
 |Model Name|Access Link|Species|Training Tokens|
 | :--- | :--- | :--- | :--- |
-| model-plants |https://huggingface.co/qzzhang/PlantGenoAnn-model-plants| 9 | 18B |
-| multi-species | https://huggingface.co/qzzhang/PlantGenoAnn-multi-species| 42 | 72B |
+| model-plants |https://huggingface.co/qzzhang/PlantGeneAnn-model-plants| 9 | 18B |
+| multi-species | https://huggingface.co/qzzhang/PlantGeneAnn-multi-species| 42 | 72B |
 
 ## 📁 Repository Structure
 * `run_annotator.py`: Main entry point (extraction, tokenization, inference dispatch).
@@ -25,10 +25,10 @@ The pre-trained weights for **PlantGenoAnn-model-plants** and **PlantGenoAnn-mul
 The model requires the [mamba-ssm](https://github.com/state-spaces/mamba) and [causal-conv1d](https://github.com/Dao-AILab/causal-conv1d) libraries for the core backbone.
 ```
 # 1. Clone repository & create environment
-git clone https://github.com/qzzhang0131/PlantGenoAnn.git
-cd PlantGenoAnn
-conda create -n plantgenoann python=3.8 -y
-conda activate plantgenoann
+git clone https://github.com/qzzhang0131/PlantGeneAnn.git
+cd PlantGeneAnn
+conda create -n PlantGeneAnn python=3.8 -y
+conda activate PlantGeneAnn
 
 # 2. Install dependencies (Crucial for Triton JIT & CUDA extensions)
 conda install -c nvidia -c conda-forge cuda-toolkit=12.1.0 libxcrypt -y
@@ -42,7 +42,7 @@ MAX_JOBS=4 pip install causal-conv1d==1.2.0.post2 mamba-ssm==1.2.0.post1 flash-a
 
 ## 🚀 Quick Start (Usage)
 
-You can use PlantGenoAnn in two ways: directly using the [transformers](https://github.com/huggingface/transformers) library for model inference and obtaining embeddings, or running the complete pipeline script to generate prediction tracks or standard GFF annotation files.
+You can use PlantGeneAnn in two ways: directly using the [transformers](https://github.com/huggingface/transformers) library for model inference and obtaining embeddings, or running the complete pipeline script to generate prediction tracks or standard GFF annotation files.
 
 ### 1. Direct Model Inference
 You can retrieve both genomic feature probabilities and sequence embeddings using the following snippet:
@@ -52,7 +52,7 @@ import torch
 from transformers import AutoTokenizer, AutoModel
 
 # Load model and tokenizer
-repo_id = "qzzhang/PlantGenoAnn-model-plants"
+repo_id = "qzzhang/PlantGeneAnn-model-plants"
 tokenizer = AutoTokenizer.from_pretrained(repo_id, trust_remote_code=True)
 model = AutoModel.from_pretrained(repo_id, trust_remote_code=True)
 
@@ -102,7 +102,7 @@ To run the full prediction pipeline, use the `run_annotator.py` script. The pipe
 python run_annotator.py \
     -i ./example/Arabidopsis_lyrata.v.1.0.dna.chromosome.8.fa \
     -s Arabidopsis_lyrata \
-    -m ./PlantGenoAnn-model-plants \
+    -m ./PlantGeneAnn-model-plants \
     -o ./example \
     -f bigwig
 ```
@@ -111,14 +111,14 @@ python run_annotator.py \
 python run_annotator.py \
     -i ./example/Arabidopsis_lyrata.v.1.0.dna.chromosome.8.fa \
     -s Arabidopsis_lyrata \
-    -m ./PlantGenoAnn-model-plants \
+    -m ./PlantGeneAnn-model-plants \
     -o ./example \
     -f gff
 ```
 
 **🛠️ 2.2 Advanced Pipeline Configuration (Optional):**
 
-PlantGenoAnn prediction pipeline is highly customizable. You can adjust sliding windows, confidence thresholds, and hardware utilization to fit your specific needs:
+PlantGeneAnn prediction pipeline is highly customizable. You can adjust sliding windows, confidence thresholds, and hardware utilization to fit your specific needs:
 
 **Hardware & Processing:**
 * `--chunk_size`: The size of the chunks processed by annotator model (default: 3,200).
@@ -143,7 +143,7 @@ PlantGenoAnn prediction pipeline is highly customizable. You can adjust sliding 
 
 ## ⚡ Hardware Requirements
 
-PlantGenoAnn inference **requires NVIDIA GPUs with Ampere architecture or newer** (e.g., RTX 30-series, RTX 40-series, A100, H100, etc.).  
+PlantGeneAnn inference **requires NVIDIA GPUs with Ampere architecture or newer** (e.g., RTX 30-series, RTX 40-series, A100, H100, etc.).  
 
 ### 1. Inference Time for Different Plant Genomes
 
@@ -158,7 +158,7 @@ The following table shows approximate **single-GPU inference time (hours)** for 
 
 > **Note**: Actual runtime may vary depending on GPU driver version, system load, and exact hardware configuration. These values are for reference only.
 
-**Multi-GPU Support:** PlantGenoAnn supports multi-GPU parallel inference through [accelerate](https://github.com/huggingface/accelerate) library. With N GPUs, the inference time is approximately 1/N of the single-GPU reference time (near-linear scaling).
+**Multi-GPU Support:** PlantGeneAnn supports multi-GPU parallel inference through [accelerate](https://github.com/huggingface/accelerate) library. With N GPUs, the inference time is approximately 1/N of the single-GPU reference time (near-linear scaling).
 
 ### 2. Recommended Batch Size by GPU VRAM
 
