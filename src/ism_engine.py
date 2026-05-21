@@ -7,7 +7,7 @@ from transformers import AutoTokenizer, AutoModel
 from accelerate import Accelerator
 from torch.utils.data import DataLoader, TensorDataset
 
-class PlantGenoAnnISMEngine:
+class PlantGeneAnnISMEngine:
     def __init__(
             self, 
             fasta_file: str, 
