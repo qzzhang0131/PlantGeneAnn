@@ -59,8 +59,6 @@ class PipelineConfig:
             raise ValueError("Overlap window size must be smaller than sliding window size.")
         if self.overlap_offset < 0:
             raise ValueError("Overlap window size cannot be negative.")
-        if self.overlap_offset % 4 != 0:
-            raise ValueError("Overlap window size must be divisible by 4.")
         if self.threshold <= 0.0 or self.threshold >=1.0:
             raise ValueError("Threshold must between 0 to 1.")
         if self.chunk_size <= 0:
