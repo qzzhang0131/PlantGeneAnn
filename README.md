@@ -128,9 +128,9 @@ PlantGeneAnn prediction pipeline is highly customizable. You can adjust sliding 
 * `--cache_path`: Specify the path to cache intermediate datasets (default: "auto").
 
 **Sequence & Window Settings:**
-* `--sliding_window_size`: Length of the sliding window used to segment the chromosome (default: 49,152).
-* `--overlap_window_size`: Overlap length between consecutive windows (default: 6,144).
-* `--min_chromosome_size`: Minimum chromosome size for annotating (default: 1,000,000).
+* `--sliding_window_size`: Length of the sliding window used to segment the chromosome (default: 32,768).
+* `--flank_window_size`: Flank length between consecutive windows (default: 4,096).
+* `--min_chromosome_size`: Minimum chromosome size for annotating (default: 1,000,000 (1MB)).
 
 **Filtering & Thresholds (only with gff output format):**
 * `--threshold`: Minimum probability threshold for valid nucleotides (default: 0.50).
