@@ -28,10 +28,10 @@ def main():
                         help="The number of CPU cores to load data in parallel (default:8).")
     parser.add_argument("--cache_path", type=str, default="auto",
                         help='Specify the path to cache (default:auto).')
-    parser.add_argument("--sliding_window_size", type=int, default=49152, 
-                        help="The length of the sliding window used to segment the chromosome (default:49,152).")
-    parser.add_argument("--overlap_window_size", type=int, default=6144, 
-                        help="The overlap length between two consecutive sliding windows (default:6,144).")
+    parser.add_argument("--sliding_window_size", type=int, default=32768, 
+                        help="The length of the sliding window used to segment the chromosome (default:32,768).")
+    parser.add_argument("--flank_window_size", type=int, default=4096, 
+                        help="The flank window length between two consecutive sliding windows (default:4,096).")
     parser.add_argument("--min_chromosome_size", type=int, default=1000000, 
                         help="Minimum chromosome size (bp) for annotating. The size below this value will not be annotate in given FA/FNA/FASTA files (default:1,000,000).")
     parser.add_argument("--threshold", type=float, default=0.50,
@@ -67,7 +67,7 @@ def main():
         model_path = args.model_path,
         cache_path = cache_path,
         sequence_length = args.sliding_window_size,
-        overlap_offset = args.overlap_window_size,
+        overlap_offset = args.flank_window_size * 2,
         chunk_size = args.chunk_size,
         threshold = args.threshold,
         min_gene_length = args.min_gene_length,
