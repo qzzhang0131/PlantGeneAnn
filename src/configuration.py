@@ -56,9 +56,9 @@ class PipelineConfig:
         if self.sequence_length <= 0:
             raise ValueError("Sliding window size must be positive.")
         if self.overlap_offset >= self.sequence_length:
-            raise ValueError("Overlap window size must be smaller than sliding window size.")
+            raise ValueError("Flank window size must be smaller than sliding window size.")
         if self.overlap_offset < 0:
-            raise ValueError("Overlap window size cannot be negative.")
+            raise ValueError("Flank window size cannot be negative.")
         if self.threshold <= 0.0 or self.threshold >=1.0:
             raise ValueError("Threshold must between 0 to 1.")
         if self.chunk_size <= 0:
