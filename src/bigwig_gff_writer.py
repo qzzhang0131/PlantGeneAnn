@@ -43,7 +43,6 @@ def generate_final_predictions(
             other_predictions,
             chrom_num_sequence - 1,
             chrom_length,
-            overlap_offset,
         )
 
     return final_preds
