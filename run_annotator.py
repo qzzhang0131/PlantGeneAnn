@@ -84,7 +84,7 @@ def main():
 
     """Execute the complete genome annotation pipeline"""
     print("=" * 60)
-    print("Starting PlantGenoAnn Prediction Pipeline....")
+    print("Starting PlantGeneAnn Prediction Pipeline....")
     print("=" * 60)
     try:
         # Step 1: Sequence Extraction
