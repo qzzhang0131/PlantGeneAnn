@@ -33,7 +33,7 @@ def main():
     parser.add_argument("--flank_window_size", type=int, default=4096, 
                         help="The flank window length between two consecutive sliding windows (default:4,096).")
     parser.add_argument("--min_chromosome_size", type=int, default=1000000, 
-                        help="Minimum chromosome size (bp) for annotating. The size below this value will not be annotate in given FA/FNA/FASTA files (default:1,000,000).")
+                        help="Minimum chromosome size (bp) for annotating. The size below this value will not be annotate in given FA/FNA/FASTA files (default:1,000,000 (1MB)).")
     parser.add_argument("--threshold", type=float, default=0.50,
                         help="Gff output format only: The minimum threshold of probability when judging whether a nucleotide is valid (default:0.50).")
     parser.add_argument("--min_gene_length", type=int, default=50,
