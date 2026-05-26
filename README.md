@@ -129,7 +129,7 @@ PlantGeneAnn prediction pipeline is highly customizable. You can adjust sliding 
 
 **Sequence & Window Settings:**
 * `--sliding_window_size`: Length of the sliding window used to segment the chromosome (default: 32,768).
-* `--flank_window_size`: Flank length between consecutive windows (default: 4,096).
+* `--flank_window_size`: Flank window length between two consecutive sliding windows (default: 4,096).
 * `--min_chromosome_size`: Minimum chromosome size for annotating (default: 1,000,000 (1MB)).
 
 **Filtering & Thresholds (only with gff output format):**
