@@ -172,12 +172,13 @@ Under default configuration, we recommend the following `batch_size` settings ba
 
 ## 📝 Citation
 If you use our model or code in your research, please cite our preprint:
-
+```
 bibtex
 @article{zhang2026plantgeneann,
   doi={10.64898/2026.06.25.733695},
   url={[https://doi.org/10.64898/2026.06.25.733695](https://doi.org/10.64898/2026.06.25.733695)}
 }
+```
 
 ## 📜 License
 See the LICENSE file for details.
