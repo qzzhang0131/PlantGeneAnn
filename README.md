@@ -169,6 +169,22 @@ Under default configuration, we recommend the following `batch_size` settings ba
 | batch size | 2    | 4    | 8    | 16   |
 
 ---
+## 📝 Citation
+
+If you use PlantGeneAnn or the generated genomic predictions in your research, please cite our preprint:
+
+Zhang, Q., Zhang, Z., Lin, K., Wang, J., Deng, K., Xiang, X., Xu, W., & Hu, X. (2026). PlantGeneAnn: a strand-specific genome foundation model for ab initio gene structure annotation of plant genomes. *bioRxiv*. https://doi.org/10.64898/2026.06.25.733695
+
+```bibtex
+@article{zhang2026plantgeneann,
+  title={PlantGeneAnn: a strand-specific genome foundation model for ab initio gene structure annotation of plant genomes},
+  author={Zhang, Qizhe and Zhang, Zhengyang and Lin, Kepeng and Wang, Jing and Deng, Kaixuan and Xiang, Xianglei and Xu, Wei and Hu, Xuehai},
+  journal={bioRxiv},
+  year={2026},
+  doi={10.64898/2026.06.25.733695},
+  url={[https://doi.org/10.64898/2026.06.25.733695](https://doi.org/10.64898/2026.06.25.733695)}
+}
+```
 ## 📜 License
 See the LICENSE file for details.
 ## 📧 Contact
