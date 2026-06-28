@@ -171,7 +171,7 @@ Under default configuration, we recommend the following `batch_size` settings ba
 ---
 ## 📝 Citation
 
-If you use PlantGeneAnn or the generated genomic predictions in your research, please cite our preprint:
+If you use PlantGeneAnn in your research, please cite our preprint:
 
 Zhang, Q., Zhang, Z., Lin, K., Wang, J., Deng, K., Xiang, X., Xu, W., & Hu, X. (2026). PlantGeneAnn: a strand-specific genome foundation model for ab initio gene structure annotation of plant genomes. *bioRxiv*. https://doi.org/10.64898/2026.06.25.733695
 
