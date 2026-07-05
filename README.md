@@ -45,7 +45,7 @@ MAX_JOBS=4 pip install causal-conv1d==1.2.0.post2 mamba-ssm==1.2.0.post1 flash-a
 
 ## 🚀 Quick Start (Usage)
 
-You can use PlantGeneAnn in two ways: directly using the [transformers](https://github.com/huggingface/transformers) library for model inference and obtaining embeddings, or running the complete pipeline script to generate standard GFF annotation files.
+You can use PlantGeneAnn in two ways: directly using the [transformers](https://github.com/huggingface/transformers) library for model inference and obtaining embeddings, or running the complete annotation pipeline script to generate standard GFF/GFF3 annotation files.
 
 ### 1. Direct Model Inference
 You can retrieve both genomic feature probabilities and sequence embeddings using the following snippet:
@@ -85,7 +85,7 @@ logits = outs.logits
 hidden_states = outs.hidden_states.detach()
 ```
 
-### 2. Full Annotation Pipeline (Recommended)
+### 2. Complete Annotation Pipeline (Recommended)
 The PlantGeneAnn annotation pipeline integrates genome foundation model inference with phase-aware HMM decoding, enabling ab initio genome annotation through the following two approaches:
 ### 2.1 One-step Annotation:
 * `-i`: The genome FA/FASTA/FNA file to be annotated.
