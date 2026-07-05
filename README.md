@@ -104,44 +104,33 @@ python run_annotator.py \
 ```
 
 ### 2.2 Two-step Annotation:
-**2.2.1 Step-1 Model Inference:**
+**2.2.1 Step-1 PlantGeneAnn Model Inference:**
 * `-i`: The genome FA/FASTA/FNA file to be annotated.
 * `-m`: Specify the path to the PlantGeneAnn model (downloaded weights from HuggingFace above).
-* `--cache_path`: Specify the path to use for both the cache and the output HDF5 file.
+* `--cache_path`: Specify the path to use for both the cache and the output probability HDF5 file.
 * `--batch_size`: Batch size depending on GPU memory (default: 16).
 * `--num_tokenize_threads`: Number of CPU threads used to tokenize the sequences (default: 8).
 * `--min_chromosome_size`: Minimum genomic record length (bp). Shorter records are skipped (default: 500,000).
 ```bash
-python run_model_inference.py \
+python run_model_prediction.py \
     -i ./examples/Arabidopsis_lyrata.v.1.0.dna.chromosome.8.fa \
     -m ./PlantGeneAnn-v1.5-flower-plants \
     --cache_path ./examples/Alyrata_cache \
 ```
 
-**🛠️ 2.3 Advanced Pipeline Configuration (Optional):**
+**2.2.2 Step-2 HMM Decoding:**
+* `-i`: The genome FA/FASTA/FNA file to be annotated.
+* `--chromosome_h5`: Path to genomic record level PlantGeneAnn probability HDF5.
+* `-o`: Specify the output GFF/GFF3 file.
+* `--num_hmm_threads`: Number of CPU threads for HMM parallel decoding. (default: 8).
+```bash
+python run_prediction_decoding.py \
+    -i ./examples/Arabidopsis_lyrata.v.1.0.dna.chromosome.8.fa \
+    --chromosome_h5 ./examples/Alyrata_cache/chromosome_predictions.h5 \
+    -o ./example/Alyrata_GeneAnn.gff3 \
+```
 
-PlantGeneAnn prediction pipeline is highly customizable. You can adjust sliding windows, confidence thresholds, and hardware utilization to fit your specific needs:
-
-**Hardware & Processing:**
-* `--chunk_size`: The size of the chunks processed by annotator model (default: 3,200).
-* `--batch_size`: The number of samples in a batch (default: 8).
-* `--num_workers`: The number of CPU cores to load data in parallel (default: 8).
-* `--num_tokenize_threads`: Number of CPU cores used to tokenize the sequence (default: 16).
-* `--cache_path`: Specify the path to cache intermediate datasets (default: "auto").
-
-**Sequence & Window Settings:**
-* `--sliding_window_size`: Length of the sliding window used to segment the chromosome (default: 32,768).
-* `--flank_window_size`: Flank window length between two consecutive sliding windows (default: 4,096).
-* `--min_chromosome_size`: Minimum chromosome size for annotating (default: 1,000,000 (1MB)).
-
-**Filtering & Thresholds (only with gff output format):**
-* `--threshold`: Minimum probability threshold for valid nucleotides (default: 0.50).
-* `--min_gene_conf_score`: The lowest gene confidence score (default: 0.60).
-* `--min_intron_conf_score`: The lowest intron confidence score (default: 0.70).
-* `--min_cds_conf_score`: The lowest CDS confidence score (default: 0.70).
-* `--min_gene_length`, `--min_intron_length`, `--min_cds_length`: Filter out predicted elements shorter than these values.
-
-*For a full list of parameters, simply run `python run_annotator.py --help`.*
+*For a full list of parameters, simply run `python run_annotator.py --help`, `python run_model_prediction.py --help` or `python run_prediction_decoding.py --help`.*
 
 ## ⚡ Hardware Requirements
 
