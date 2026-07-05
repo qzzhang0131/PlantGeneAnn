@@ -85,7 +85,7 @@ logits = outs.logits
 hidden_states = outs.hidden_states.detach()
 ```
 
-### 2. Full Prediction Pipeline (Recommended)
+### 2. Full Annotation Pipeline with HMM Decoding (Recommended)
 To run the full prediction pipeline, use the `run_annotator.py` script. The pipeline will automatically handle sliding windows, multi-GPU model inference, and standard output format.
 
 **🛠️ 2.1 Basic Configuration:**
