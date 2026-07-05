@@ -22,7 +22,7 @@ The pre-trained weights for **PlantGeneAnn** are hosted on Hugging Face:
 * `run_model_prediction.py`: two-step annotation script for model inference.
 * `run_prediction_decoding.py`: two-step annotation script for HMM decoding.
 * `annotator.py`: Core inference script utilizing [accelerate](https://github.com/huggingface/accelerate) library (bf16 precision).
-* `src/`: Functional modules for sequence processing, model wrapping, and output files generation.
+* `src/`: Functional modules for sequence processing, sequence tokenization, and HMM decoding.
 
 ## ⚙️ Installation & Environment
 The model requires the [mamba-ssm](https://github.com/state-spaces/mamba) and [causal-conv1d](https://github.com/Dao-AILab/causal-conv1d) libraries for the core backbone.
