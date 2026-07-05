@@ -85,25 +85,22 @@ logits = outs.logits
 hidden_states = outs.hidden_states.detach()
 ```
 
-### 2. Full Annotation Pipeline with HMM Decoding (Recommended)
-To run the full prediction pipeline, use the `run_annotator.py` script. The pipeline will automatically handle sliding windows, multi-GPU model inference, and standard output format.
+### 2. Full Annotation Pipeline (Recommended)
 
-**🛠️ 2.1 Basic Configuration:**
+**🛠️ 2.1 One-step Annotation:**
 * `-i`: The genome FA/FNA file to be predicted.
-* `-s`: The species name to be predicted.
 * `-m`: Specify the path to the prediction model (downloaded weights from HuggingFace above).
-* `-o`: Specify the output path.
-* `-f`: Choose to write predictions to BigWig files or a standard GFF3 file (default: "bigwig").
+* `-o`: Specify the output GFF/GFF3 file.
+* `--num_tokenize_threads`: Number of CPU threads used to tokenize the sequences (default: 16).
+* `--num_hmm_threads`: Number of CPU threads for HMM parallel decoding. (default: 8).
 
-**Save Full Prediction Tracks to BigWig Files:**
 ```bash
 python run_annotator.py \
     -i ./example/Arabidopsis_lyrata.v.1.0.dna.chromosome.8.fa \
-    -s Arabidopsis_lyrata \
-    -m ./PlantGeneAnn-model-plants \
-    -o ./example \
-    -f bigwig
+    -m ./PlantGeneAnn-v1.5-flower-plants \
+    -o ./example/Alyrata_GeneAnn.gff3 \
 ```
+
 **Write Prediction Tracks to a Standard GFF3 File:**
 ```bash
 python run_annotator.py \
