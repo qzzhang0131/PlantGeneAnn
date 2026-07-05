@@ -88,7 +88,7 @@ hidden_states = outs.hidden_states.detach()
 ### 2. Full Annotation Pipeline (Recommended)
 
 **🛠️ 2.1 One-step Annotation:**
-* `-i`: The genome FA/FNA file to be predicted.
+* `-i`: The genome FA/FASTA/FNA file to be annotated.
 * `-m`: Specify the path to the prediction model (downloaded weights from HuggingFace above).
 * `-o`: Specify the output GFF/GFF3 file.
 * `--batch_size`: Batch size depending on GPU memory (default: 16).
