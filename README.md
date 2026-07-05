@@ -94,7 +94,7 @@ hidden_states = outs.hidden_states.detach()
 * `--batch_size`: Batch size depending on GPU memory (default: 16).
 * `--num_tokenize_threads`: Number of CPU threads used to tokenize the sequences (default: 8).
 * `--num_hmm_threads`: Number of CPU threads for HMM parallel decoding. (default: 8).
-* `--min_chromosome_size`: Minimum genomic record length (bp). Shorter records are skipped (default: 500,000).
+* `--min_chromosome_size`: Minimum chromosome length (bp). Shorter records are skipped (default: 500,000).
 
 ```bash
 python run_annotator.py \
@@ -107,7 +107,7 @@ python run_annotator.py \
 **2.2.1 Step-1 PlantGeneAnn Model Inference:**
 * `-i`: The genome FA/FASTA/FNA file to be annotated.
 * `-m`: Specify the path to the PlantGeneAnn model (downloaded weights from HuggingFace above).
-* `--cache_path`: Specify the path to use for both the cache and the output probability HDF5 file.
+* `--cache_path`: Specify the path to use for both the cache and the chromosome level HDF5 file.
 * `--batch_size`: Batch size depending on GPU memory (default: 16).
 * `--num_tokenize_threads`: Number of CPU threads used to tokenize the sequences (default: 8).
 * `--min_chromosome_size`: Minimum genomic record length (bp). Shorter records are skipped (default: 500,000).
@@ -120,7 +120,7 @@ python run_model_prediction.py \
 
 **2.2.2 Step-2 HMM Decoding:**
 * `-i`: The genome FA/FASTA/FNA file to be annotated.
-* `--chromosome_h5`: Path to genomic record level PlantGeneAnn probability HDF5.
+* `--chromosome_h5`: Path to chromosome level PlantGeneAnn probability HDF5.
 * `-o`: Specify the output GFF/GFF3 file.
 * `--num_hmm_threads`: Number of CPU threads for HMM parallel decoding. (default: 8).
 ```bash
