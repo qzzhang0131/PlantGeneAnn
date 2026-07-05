@@ -98,8 +98,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--num_hmm_threads",
         type=int,
-        default=None,
-        help="Number of CPU workers for HMM decoding. Default: all available CPUs.",
+        default=8,
+        help="Number of CPU workers for HMM decoding (default:8).",
     )
     parser.add_argument(
         "--hmm_splice_event_prob",
