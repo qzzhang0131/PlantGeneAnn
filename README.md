@@ -11,9 +11,9 @@
 The pre-trained weights for **PlantGeneAnn** are hosted on Hugging Face:
 |Model Name|Access Link|
 | :--- | :--- |
-| v1.5-flower-plants |[https://huggingface.co/qzzhang/PlantGeneAnn-model-plants](https://huggingface.co/qzzhang/PlantGeneAnn-v1.5-flower-plants)|
-| v1.0-model-plants |https://huggingface.co/qzzhang/PlantGeneAnn-v1.0-model-plants|
-| v1.0-multi-species |https://huggingface.co/qzzhang/PlantGeneAnn-v1.0-multi-species|
+| PlantGeneAnn-v1.5-flower-plants |https://huggingface.co/qzzhang/PlantGeneAnn-v1.5-flower-plants|
+| PlantGeneAnn-v1.0-model-plants |https://huggingface.co/qzzhang/PlantGeneAnn-v1.0-model-plants|
+| PlantGeneAnn-v1.0-multi-species |https://huggingface.co/qzzhang/PlantGeneAnn-v1.0-multi-species|
 
 ## 📁 Repository Structure
 * `run_annotator.py`: Main entry point (extraction, tokenization, inference dispatch).
