@@ -89,7 +89,7 @@ hidden_states = outs.hidden_states.detach()
 
 **🛠️ 2.1 One-step Annotation:**
 * `-i`: The genome FA/FASTA/FNA file to be annotated.
-* `-m`: Specify the path to the prediction model (downloaded weights from HuggingFace above).
+* `-m`: Specify the path to the PlantGeneAnn model (downloaded weights from HuggingFace above).
 * `-o`: Specify the output GFF/GFF3 file.
 * `--batch_size`: Batch size depending on GPU memory (default: 16).
 * `--num_tokenize_threads`: Number of CPU threads used to tokenize the sequences (default: 8).
@@ -98,22 +98,27 @@ hidden_states = outs.hidden_states.detach()
 
 ```bash
 python run_annotator.py \
-    -i ./example/Arabidopsis_lyrata.v.1.0.dna.chromosome.8.fa \
+    -i ./examples/Arabidopsis_lyrata.v.1.0.dna.chromosome.8.fa \
     -m ./PlantGeneAnn-v1.5-flower-plants \
     -o ./example/Alyrata_GeneAnn.gff3 \
 ```
 
-**Write Prediction Tracks to a Standard GFF3 File:**
+**🛠️ 2.2 Two-step Annotation:**
+**2.2.1 Step.1 Model Inference:**
+* `-i`: The genome FA/FASTA/FNA file to be annotated.
+* `-m`: Specify the path to the PlantGeneAnn model (downloaded weights from HuggingFace above).
+* `--cache_path`: Specify the path to use for both the cache and the output HDF5 file.
+* `--batch_size`: Batch size depending on GPU memory (default: 16).
+* `--num_tokenize_threads`: Number of CPU threads used to tokenize the sequences (default: 8).
+* `--min_chromosome_size`: Minimum genomic record length (bp). Shorter records are skipped (default: 500,000).
 ```bash
-python run_annotator.py \
-    -i ./example/Arabidopsis_lyrata.v.1.0.dna.chromosome.8.fa \
-    -s Arabidopsis_lyrata \
-    -m ./PlantGeneAnn-model-plants \
-    -o ./example \
-    -f gff
+python run_model_inference.py \
+    -i ./examples/Arabidopsis_lyrata.v.1.0.dna.chromosome.8.fa \
+    -m ./PlantGeneAnn-v1.5-flower-plants \
+    --cache_path ./examples/Alyrata_cache \
 ```
 
-**🛠️ 2.2 Advanced Pipeline Configuration (Optional):**
+**🛠️ 2.3 Advanced Pipeline Configuration (Optional):**
 
 PlantGeneAnn prediction pipeline is highly customizable. You can adjust sliding windows, confidence thresholds, and hardware utilization to fit your specific needs:
 
