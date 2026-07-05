@@ -246,7 +246,7 @@ def main():
                         help="Minimum intron length used by HMM state topology (default:%(default)s).")
     parser.add_argument("--min_cds_length", type=int, default=DEFAULT_HMM_MIN_CDS_LENGTH,
                         help="Minimum total CDS length for emitted HMM genes (default:%(default)s).")
-    parser.add_argument("--num_hmm_threads", type=int, default=None,
+    parser.add_argument("--num_hmm_threads", type=int, default=8,
                         help="Number of CPU threads for HMM parallel decoding. "
                         "If omitted, uses all available CPU cores.")    
     parser.add_argument("--hmm_splice_event_prob", type=float, default=DEFAULT_HMM_SPLICE_EVENT_PROB,
