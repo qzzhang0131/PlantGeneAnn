@@ -18,7 +18,9 @@ The pre-trained weights for **PlantGeneAnn** are hosted on Hugging Face:
 > **Note**: **The latest annotation pipeline only supports the v1.5-flower-plants model.** If you need to use the v1.0-model-plants or v1.0-multi-species models, please download the corresponding previous version of the annotation pipeline from the [Releases](https://github.com/qzzhang0131/PlantGeneAnn/releases) page.
 
 ## 📁 Repository Structure
-* `run_annotator.py`: Main entry point (extraction, tokenization, inference dispatch).
+* `run_annotator.py`: one-step annotation script.
+* `run_model_prediction.py`: two-step annotation script for model inference.
+* `run_prediction_decoding.py`: two-step annotation script for hmm decoding.
 * `annotator.py`: Core inference script utilizing [accelerate](https://github.com/huggingface/accelerate) library (bf16 precision).
 * `src/`: Functional modules for sequence processing, model wrapping, and output files generation.
 
