@@ -103,8 +103,8 @@ python run_annotator.py \
     -o ./example/Alyrata_GeneAnn.gff3 \
 ```
 
-**🛠️ 2.2 Two-step Annotation:**
-2.2.1 Step.1 Model Inference:
+### 🛠️ 2.2 Two-step Annotation:
+**2.2.1 Step.1 Model Inference:**
 * `-i`: The genome FA/FASTA/FNA file to be annotated.
 * `-m`: Specify the path to the PlantGeneAnn model (downloaded weights from HuggingFace above).
 * `--cache_path`: Specify the path to use for both the cache and the output HDF5 file.
