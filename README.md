@@ -110,7 +110,7 @@ python run_annotator.py \
 * `--cache_path`: Specify the path to use for both the cache and the chromosome level HDF5 file.
 * `--batch_size`: Batch size depending on GPU memory (default: 16).
 * `--num_tokenize_threads`: Number of CPU threads used to tokenize the sequences (default: 8).
-* `--min_chromosome_size`: Minimum genomic record length (bp). Shorter records are skipped (default: 500,000).
+* `--min_chromosome_size`: Minimum chromosome length (bp). Shorter records are skipped (default: 500,000).
 ```bash
 python run_model_prediction.py \
     -i ./examples/Arabidopsis_lyrata.v.1.0.dna.chromosome.8.fa \
