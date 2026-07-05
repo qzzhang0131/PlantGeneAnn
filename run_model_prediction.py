@@ -252,7 +252,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--chunk_size", type=int, default=DEFAULT_CHUNK_SIZE, help="Chunk size for sequence windows (default:%(default)s).")
     parser.add_argument("--batch_size", type=int, default=DEFAULT_BATCH_SIZE, help="Inference batch size (default:%(default)s).")
     parser.add_argument("--num_processes", type=int, default=None, help="Accelerate worker processes.")
-    parser.add_argument("--num_tokenize_threads", type=int, default=16, help="Tokenizer worker processes.")
+    parser.add_argument("--num_tokenize_threads", type=int, default=8, help="Tokenizer worker processes.")
     parser.add_argument("--num_workers", type=int, default=DEFAULT_NUM_WORKERS, help="DataLoader worker processes (default:%(default)s).")
     parser.add_argument("--sliding_window_size", type=int, default=DEFAULT_SEQUENCE_LENGTH, help="Model input window length (default:%(default)s).")
     parser.add_argument("--flank_window_size", type=int, default=DEFAULT_FLANK_LENGTH, help="Flank/context length (default:%(default)s).")
