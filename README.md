@@ -91,8 +91,10 @@ hidden_states = outs.hidden_states.detach()
 * `-i`: The genome FA/FNA file to be predicted.
 * `-m`: Specify the path to the prediction model (downloaded weights from HuggingFace above).
 * `-o`: Specify the output GFF/GFF3 file.
-* `--num_tokenize_threads`: Number of CPU threads used to tokenize the sequences (default: 16).
+* `--batch_size`: Batch size depending on GPU memory (default: 16).
+* `--num_tokenize_threads`: Number of CPU threads used to tokenize the sequences (default: 8).
 * `--num_hmm_threads`: Number of CPU threads for HMM parallel decoding. (default: 8).
+* `--min_chromosome_size`: Minimum genomic record length (bp). Shorter records are skipped (default: 500,000).
 
 ```bash
 python run_annotator.py \
