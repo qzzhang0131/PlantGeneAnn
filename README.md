@@ -86,7 +86,7 @@ hidden_states = outs.hidden_states.detach()
 ```
 
 ### 2. Full Annotation Pipeline (Recommended)
-
+The PlantGeneAnn annotation pipeline integrates genome foundation model inference with phase-aware HMM decoding, enabling ab initio genome annotation through the following two approaches:
 ### 2.1 One-step Annotation:
 * `-i`: The genome FA/FASTA/FNA file to be annotated.
 * `-m`: Specify the path to the PlantGeneAnn model (downloaded weights from HuggingFace above).
