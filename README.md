@@ -20,7 +20,7 @@ The pre-trained weights for **PlantGeneAnn** are hosted on Hugging Face:
 ## 📁 Repository Structure
 * `run_annotator.py`: one-step annotation script.
 * `run_model_prediction.py`: two-step annotation script for model inference.
-* `run_prediction_decoding.py`: two-step annotation script for hmm decoding.
+* `run_prediction_decoding.py`: two-step annotation script for HMM decoding.
 * `annotator.py`: Core inference script utilizing [accelerate](https://github.com/huggingface/accelerate) library (bf16 precision).
 * `src/`: Functional modules for sequence processing, model wrapping, and output files generation.
 
