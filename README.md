@@ -55,13 +55,13 @@ import torch
 from transformers import AutoTokenizer, AutoModel
 
 # Load model and tokenizer
-repo_id = "qzzhang/PlantGeneAnn-model-plants"
+repo_id = "qzzhang/PlantGeneAnn-v1.5-flower-plants"
 tokenizer = AutoTokenizer.from_pretrained(repo_id, trust_remote_code=True)
 model = AutoModel.from_pretrained(repo_id, trust_remote_code=True)
 
-# The number of DNA tokens (excluding the [CLS] and [SEP] token) needs to be divisible by 8 
+# The number of DNA tokens (excluding the [CLS] and [SEP] token) needs to be divisible by 16 
 # as required by the U-Net downsampling blocks. 
-sequences = ["ACTAGAGCGAGAGAAA","TTTGAGAGCGCGCGGA"] 
+sequences = ["AATTCCGGAA"*4096,"AAAATTTTCC"*4096] 
 
 # Tokenize
 tokenized_sequences = tokenizer(
@@ -74,20 +74,15 @@ tokenized_sequences = tokenizer(
 model.to("cuda")
 model.eval()
 with torch.no_grad():
-    outs = model(input_ids=tokenized_sequences.to("cuda"))
+    outs = model(input_ids=tokenized_sequences.to("cuda"), return_dict=True)
 
 # Obtain the logits over the genomic features
-# Shape: [batch, sequence_length, num_features]
+# Shape: [batch, sequence_length - 2 * flank_length, 2 * num_features]
 logits = outs.logits
 
-# Get probabilities associated with CDS on the forward strand (+)
-pos_strand_cds_probs = model.get_feature_logits(feature="CDS", strand="+", logtis=logits).detach()
-print(f"CDS probabilities on the forward strand: {pos_strand_cds_probs}")
-
 # Get the sequence embeddings
-# Shape: [batch, sequence_length, 1024]
+# Shape: [batch, sequence_length - 2 * flank_length, 512]
 hidden_states = outs.hidden_states.detach()
-print(f"Sequence embeddings shape is: {hidden_states.shape}")
 ```
 
 ### 2. Full Prediction Pipeline
