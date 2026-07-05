@@ -1,4 +1,4 @@
-# PlantGeneAnn: Plant Gene Annotation Model
+# PlantGeneAnn: Plant Gene Annotator
 
 [![Hugging Face Model](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Models-yellow)](https://huggingface.co/qzzhang/PlantGeneAnn)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
