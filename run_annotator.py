@@ -223,8 +223,8 @@ def main():
                         help="Batch size depending on GPU memory (default:%(default)s).")
     parser.add_argument("--num_processes", type=int, default=None,
                         help="Number of local Accelerate worker processes. If omitted, automatically uses all GPUs visible to the current process.")
-    parser.add_argument("--num_tokenize_threads", type=int, default=16,
-                        help="Number of CPU cores used to tokenize the sequence (default:16).")
+    parser.add_argument("--num_tokenize_threads", type=int, default=8,
+                        help="Number of CPU cores used to tokenize the sequence (default:8).")
     parser.add_argument("--num_workers", type=int, default=DEFAULT_NUM_WORKERS,
                         help="The number of CPU cores used by DataLoader to load data in parallel (default:%(default)s).")
     parser.add_argument("--cache_path", type=str, default="auto",
