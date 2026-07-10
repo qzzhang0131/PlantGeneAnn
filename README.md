@@ -100,7 +100,7 @@ The PlantGeneAnn annotation pipeline integrates genome foundation model inferenc
 python run_annotator.py \
     -i ./examples/Arabidopsis_lyrata.v.1.0.dna.chromosome.8.fa \
     -m ./PlantGeneAnn-v1.5-flower-plants \
-    -o ./examples/Alyrata_GeneAnn.gff3 \
+    -o ./examples/Alyrata_chr8_GeneAnn.gff3 \
 ```
 
 ### 2.2 Two-step Annotation:
@@ -127,7 +127,7 @@ python run_model_prediction.py \
 python run_prediction_decoding.py \
     -i ./examples/Arabidopsis_lyrata.v.1.0.dna.chromosome.8.fa \
     --chromosome_h5 ./examples/Alyrata_cache/chromosome_predictions.h5 \
-    -o ./examples/Alyrata_GeneAnn.gff3 \
+    -o ./examples/Alyrata_chr8_GeneAnn.gff3 \
 ```
 
 *For a full list of parameters, simply run `python run_annotator.py --help`, `python run_model_prediction.py --help` or `python run_prediction_decoding.py --help`.*
