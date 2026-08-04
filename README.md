@@ -55,7 +55,7 @@ import torch
 from transformers import AutoTokenizer, AutoModel
 
 # Load model and tokenizer
-repo_id = "qzzhang/PlantGeneAnn-v1.5-flower-plants"
+repo_id = "qzzhang/PlantGeneAnn-v1-5-flower-plants"
 tokenizer = AutoTokenizer.from_pretrained(repo_id, trust_remote_code=True)
 model = AutoModel.from_pretrained(repo_id, trust_remote_code=True)
 
