@@ -99,7 +99,7 @@ The PlantGeneAnn annotation pipeline integrates genome foundation model inferenc
 ```bash
 python run_annotator.py \
     -i ./examples/Arabidopsis_lyrata.v.1.0.dna.chromosome.8.fa \
-    -m ./PlantGeneAnn-v1.5-flower-plants \
+    -m ./PlantGeneAnn-v1-5-flower-plants \
     -o ./examples/Alyrata_chr8_GeneAnn.gff3 \
 ```
 
@@ -114,7 +114,7 @@ python run_annotator.py \
 ```bash
 python run_model_prediction.py \
     -i ./examples/Arabidopsis_lyrata.v.1.0.dna.chromosome.8.fa \
-    -m ./PlantGeneAnn-v1.5-flower-plants \
+    -m ./PlantGeneAnn-v1-5-flower-plants \
     --cache_path ./examples/Alyrata_cache \
 ```
 
