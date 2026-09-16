@@ -8,7 +8,7 @@
 [![bioRxiv](https://img.shields.io/badge/bioRxiv-10.64898%2F2026.06.25.733695-b31b1b.svg)](https://doi.org/10.64898/2026.06.25.733695)
 [![Hugging Face](https://img.shields.io/badge/%F0%9F%A4%97%20Model-PlantGeneAnn--v2--Angiospermae-FFD21E.svg)](https://huggingface.co/qzzhang/PlantGeneAnn-v2-Angiospermae/tree/main)
 
-**PlantGeneAnn** (Plant Gene Annotator) is a tool for accurate **ab initio protein-coding gene structure annotation in plant genomes**. It automatically predicts nucleotide-level gene states on both genomic strands using a genome foundation model(GFM)-based model and converts them into biologically valid gene models through **semi-Markov model (SMM) decoding**.
+**PlantGeneAnn** (Plant Gene Annotator) is a tool for accurate **ab initio protein-coding gene structure annotation in plant genomes**. It automatically predicts nucleotide-level gene states on both genomic strands using a genome foundation model (GFM) and converts these predictions into biologically valid gene models through **semi-Markov model (SMM)** decoding.
 
 PlantGeneAnn accepts a plant genome in FASTA format and directly produces a standard GFF3 annotation. It does not require RNA-seq alignments, protein homology, or an existing genome annotation.
 
