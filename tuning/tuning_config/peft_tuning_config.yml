@@ -1,0 +1,44 @@
+format_version: 1
+method: peft
+
+# Fixed PEFT strategy (implemented and validated in tuning.config):
+# - Mamba-LoRA on backbone in_proj/out_proj in all 16 layers
+# - Backbone SwiGLU, MoE experts, and MoE routers all stay frozen
+# - LoRA on every decoder Transformer encoder attention/FFN projection
+# - Full tuning of the last up block, local refine block, final norm, and head
+# - All remaining parameters frozen
+#
+# All trainable PEFT modules use the shared optimizer values below.
+
+peft:
+  learning_rate: 1.0e-4
+  weight_decay: 0.01
+
+# Supported: masked_focal_f1 (PlantGeneAnn) or tiberius_cce_f1.
+loss:
+  name: masked_focal_f1
+
+training:
+  optimizer: adamw
+  beta1: 0.9
+  beta2: 0.99
+  scheduler: cosine  # cosine or linear
+  warmup_ratio: 0.05
+  max_grad_norm: 1.0
+  mixed_precision: bf16
+  train_batch_size: 1
+  eval_batch_size: 8
+  gradient_accumulation_steps: 16
+  epochs: 20
+  eval_steps: 1000
+  logging_steps: 1000
+  early_stopping_patience: 2
+  metric_for_best_model: macro_f1
+  seed: 42
+  num_workers: 4
+
+checkpoint:
+  save_peft_only: true
+  save_full_inference_model: true
+  safe_serialization: false
+  save_last: false

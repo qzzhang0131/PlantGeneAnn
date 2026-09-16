@@ -1,0 +1,37 @@
+format_version: 1
+
+window:
+  length: 40960
+  overlap: 20480
+  flank_length: 4096
+  min_record_length: 32768
+  max_non_atcg: 408
+
+qc:
+  gene_biotype_key: gene_biotype
+  protein_coding_values: [protein_coding, protein-coding]
+  multi_transcript: longest_cds
+  min_cds_length: 60
+  hard_min_intron_length: 4
+  soft_min_intron_length: 20
+  start_codons: [ATG]
+  stop_codons: [TAA, TAG, TGA]
+  intron_source: exon
+  allow_partial: false
+  allow_annotation_exceptions: false
+  noncanonical_splice_policy: hard
+  low_quality_policy: half
+
+labels:
+  reset_mask0_labels_to_background: true
+  overlap_conflict_policy: error
+
+output:
+  shard_rows: 1000
+  write_qc_beds: true
+  write_qc_tsv: true
+
+workers:
+  qc: 8
+  chromosomes: 4
+  tokenization: 16

@@ -2,8 +2,7 @@ import argparse
 import gc
 import logging
 import os
-import time
-from typing import Dict, List, Mapping, Optional
+from typing import Dict, Optional
 
 import numpy as np
 import torch
@@ -11,58 +10,56 @@ from accelerate import Accelerator
 from datasets import load_from_disk
 from torch.utils.data import DataLoader
 from tqdm import tqdm
-
 from transformers import AutoModel
 
-from src.constants import (
-    INTEGER_METADATA_COLUMNS,
-    LABEL_NAMES,
-    REQUIRED_METADATA_COLUMNS,
-)
 from src.chromosome_writer import ChromosomePredictionWriter
 from src.configuration import (
     DEFAULT_BATCH_SIZE,
     DEFAULT_INFERENCE_MIXED_PRECISION,
-    DEFAULT_NUM_WORKERS,
 )
-from src.logging_config import setup_logger
+from src.constants import (
+    INTEGER_METADATA_COLUMNS,
+    PREDICTION_NUM_CHANNELS,
+    PREDICTION_NUM_CLASSES,
+    PREDICTION_NUM_STRANDS,
+    REQUIRED_METADATA_COLUMNS,
+)
+from src.runtime import configure_single_threaded_libraries, setup_logger
 
 logger = logging.getLogger("PlantGeneAnn.annotator")
 
 
 class GenomeAnnotator:
-    """Run distributed genome annotation inference with a Caduceus-based model.
+    """Run distributed 15-state annotation inference with SegmentCaduceusPh.
 
-    The current implementation targets the PlantGeneAnn v2 segmentation model.
-    The v2 model predicts two independent strand-specific categorical tracks:
+    The model predicts two independent strand-specific categorical tracks with
+    15 mutually exclusive labels per strand. The 30 output channels contain
+    all positive-strand labels followed by all negative-strand labels.
 
-        - positive strand: 5 mutually exclusive classes
-        - negative strand: 5 mutually exclusive classes
+    Per-strand labels are encoded as:
 
-    Class labels are encoded as:
-        0: Intergenic
-        1: CDS-phase0  (GFF3 phase=0; first codon position)
-        2: CDS-phase1  (GFF3 phase=1; third codon position)
-        3: CDS-phase2  (GFF3 phase=2; second codon position)
-        4: Intron
+        0: background
+        1-3: frame-indexed intron states 0/1/2
+        4-6: CDS frame states 0/1/2 (first/second/third codon base)
+        7: START (first start-codon base)
+        8-10: donor states 0/1/2
+        11-13: acceptor states 0/1/2
+        14: STOP (last stop-codon base)
 
-    Along the transcript direction, a continuous CDS cycles through model
-    labels ``1 -> 3 -> 2``. These correspond to GFF3 phases ``0 -> 2 -> 1``
-    and codon positions first -> second -> third. The HMM decoder aggregates
-    the three CDS channels as emission evidence and independently enforces
-    reading-frame continuity in its state topology.
+    State suffixes follow the confirmed label transition graph and are not
+    conventional GFF3 phases. GFF3 phase is calculated later from cumulative
+    CDS length in transcript direction.
 
-    For each input window, the HDF5 output dataset has shape ``(N, 2, L, C)``:
+    For each inference chunk, the in-memory probability tensor has shape
+    ``(N, 2, L, C)``:
         - N: number of sequence windows in the chunk
         - 2: strand axis, where 0 = positive strand and 1 = negative strand
         - L: center-output length after any model-side cropping
-        - C: number of mutually exclusive classes per strand (5 for v2)
+        - C: number of mutually exclusive classes per strand (15)
 
-    Values are complete per-strand softmax distributions saved as ``float16``
-    for HMM emission probabilities.
+    Values are complete per-strand 15-way softmax distributions saved as
+    ``float16`` for strict segmental weighted-DAG emissions.
     """
-
-    STRAND_NAMES: List[str] = ["positive", "negative"]
 
     def __init__(
         self,
@@ -78,59 +75,64 @@ class GenomeAnnotator:
         self.output_h5_path = os.path.abspath(output_h5_path)
         self.num_chunks = num_chunks
         self.batch_size = batch_size
-        self.num_workers = num_workers
+        self.num_workers = int(num_workers)
+        if self.num_workers < 0:
+            raise ValueError("DataLoader num_workers cannot be negative.")
+        configure_single_threaded_libraries()
+        # The pipeline uses a fixed 15-state label schema. Compatibility is
+        # enforced against actual logits at inference time rather than by
+        # reading or validating model configuration metadata.
+        self.num_features = PREDICTION_NUM_CLASSES
         self.accelerator = Accelerator(
             mixed_precision=DEFAULT_INFERENCE_MIXED_PRECISION
         )
         self.device = self.accelerator.device
-        self.num_processes = self.accelerator.state.num_processes
         try:
             self.model = AutoModel.from_pretrained(
                 self.model_path,
                 trust_remote_code=True,
                 local_files_only=True,
             )
-            self.model.to(self.device)
-            self.model.eval()
-            self.num_features = int(getattr(self.model.config, "num_features", len(LABEL_NAMES)))
-            if self.num_features != len(LABEL_NAMES):
-                raise ValueError(
-                    "PlantGeneAnn v2 requires exactly five classes per strand, "
-                    f"but the model config declares {self.num_features}."
-                )
-            self.model = self.accelerator.prepare(self.model)
-            if self.accelerator.is_main_process:
-                logger.info("Model loaded successfully from %s", self.model_path)
         except Exception as e:
-            raise RuntimeError(f"Failed to load model from {self.model_path}: {e}")
+            raise RuntimeError(
+                f"Failed to load model weights from {self.model_path}: {e}"
+            ) from e
+
+        self.model.to(self.device)
+        self.model.eval()
+        self.model = self.accelerator.prepare(self.model)
 
     def _logits_to_strand_probabilities(
         self,
         logits: torch.Tensor,
     ) -> torch.Tensor:
-        """Convert v2 logits to full 5-class softmax distributions.
+        """Convert 30-channel logits to two 15-class softmax distributions.
 
         Returns:
-            full_probs: (batch, 2, length, num_features) float16 — complete
-              5-class softmax distribution per strand for HMM emission probabilities
-              used as HMM emission probabilities.
+            ``(batch, 2, length, 15)`` float16 probabilities, independently
+            normalized over the 15 labels of each strand.
         """
         if logits.ndim != 3:
             raise ValueError(
                 "PlantGeneAnn logits must have shape (batch, length, channels), "
                 f"but got {tuple(logits.shape)}."
             )
-
-        expected_channels = 2 * self.num_features
+        if logits.shape[0] <= 0 or logits.shape[1] <= 0:
+            raise ValueError(
+                "PlantGeneAnn logits must contain at least one batch item and "
+                f"one sequence position, got {tuple(logits.shape)}."
+            )
+        expected_channels = PREDICTION_NUM_CHANNELS
         if logits.shape[-1] != expected_channels:
             raise ValueError(
-                "PlantGeneAnn logits channel mismatch: expected "
-                f"{expected_channels} channels (= 2 strands * {self.num_features} classes), "
-                f"but got {logits.shape[-1]}. Please check that --model_path points to the correct checkpoint."
+                "PlantGeneAnn 15-state logits must contain exactly "
+                f"{expected_channels} channels (= {PREDICTION_NUM_STRANDS} "
+                f"strands * {PREDICTION_NUM_CLASSES} states), but got "
+                f"{logits.shape[-1]}."
             )
 
-        positive_logits = logits[..., : self.num_features]
-        negative_logits = logits[..., self.num_features :]
+        positive_logits = logits[..., :PREDICTION_NUM_CLASSES]
+        negative_logits = logits[..., PREDICTION_NUM_CLASSES:]
 
         positive_probs = torch.softmax(positive_logits.float(), dim=-1)
         negative_probs = torch.softmax(negative_logits.float(), dim=-1)
@@ -143,7 +145,7 @@ class GenomeAnnotator:
         return full_probs
 
     def _extract_window_metadata(self, datasets, chunk_number: int) -> Dict[str, np.ndarray]:
-        """Extract and validate per-window genomic metadata from a tokenized chunk.
+        """Extract per-window genomic metadata from a tokenized chunk.
         
         ``SequenceExtractor`` writes these columns to ``chunk_N.tsv`` and
         ``SequenceTokenizer`` preserves them in the HuggingFace Dataset. Persisting
@@ -186,135 +188,7 @@ class GenomeAnnotator:
             )
         metadata["chrom_id"] = chrom_ids
 
-        self._validate_window_metadata(metadata, chunk_number)
         return metadata
-
-    def _validate_window_metadata(
-        self,
-        metadata: Mapping[str, np.ndarray],
-        chunk_number: int,
-    ) -> None:
-        """Validate window metadata consistency before writing HDF5.
-        
-        These checks catch common multi-sequence FNA and coordinate issues early:
-        non-monotonic global window order, negative coordinates, empty center
-        intervals, incorrect chunk IDs, and corrupted chunk-local indices.
-        """
-        n_rows = len(metadata["global_window_index"])
-        if n_rows == 0:
-            raise ValueError(f"Tokenized chunk {chunk_number} contains no metadata rows.")
-
-        if np.any(metadata["center_start"] < 0):
-            raise ValueError(f"Chunk {chunk_number} contains negative center_start values.")
-
-        if np.any(metadata["center_end"] <= metadata["center_start"]):
-            raise ValueError(
-                f"Chunk {chunk_number} contains invalid center intervals; "
-                "center_end must be greater than center_start."
-            )
-
-        if np.any(metadata["chrom_length"] <= 0):
-            raise ValueError(f"Chunk {chunk_number} contains non-positive chrom_length values.")
-
-        if np.any(metadata["center_start"] >= metadata["chrom_length"]):
-            raise ValueError(
-                f"Chunk {chunk_number} contains center_start values beyond or at chrom_length."
-            )
-
-        if np.any(metadata["chunk_id"] != chunk_number):
-            observed = np.unique(metadata["chunk_id"]).tolist()
-            raise ValueError(
-                f"Chunk {chunk_number} metadata has inconsistent chunk_id values: {observed}."
-            )
-
-        expected_local_indices = np.arange(n_rows, dtype=np.int64)
-        if not np.array_equal(metadata["chunk_local_index"], expected_local_indices):
-            raise ValueError(
-                f"Chunk {chunk_number} has corrupted chunk_local_index values; "
-                "expected consecutive 0-based indices within the chunk."
-            )
-
-        global_indices = metadata["global_window_index"]
-        if np.any(np.diff(global_indices) <= 0):
-            raise ValueError(
-                f"Chunk {chunk_number} global_window_index values must be strictly increasing."
-            )
-
-        chrom_ids = metadata["chrom_id"]
-        chrom_lengths = metadata["chrom_length"]
-        chrom_indices = metadata["chrom_index"]
-        chrom_window_indices = metadata["chrom_window_index"]
-        center_starts = metadata["center_start"]
-        center_ends = metadata["center_end"]
-
-        # For a multi-sequence FNA, windows from the same chrom_id should appear
-        # contiguously because SequenceExtractor iterates genomic records in FASTA
-        # order. Within each chrom_id, record-local indices and center
-        # coordinates must increase monotonically.
-        seen_chrom_ids = set()
-        current_chrom_id = None
-        last_chrom_length = None
-        last_chrom_index = None
-        last_window_index = None
-        last_center_start = None
-        last_center_end = None
-
-        for row_idx, chrom_id in enumerate(chrom_ids):
-            if chrom_id != current_chrom_id:
-                if chrom_id in seen_chrom_ids:
-                    raise ValueError(
-                        f"Chunk {chunk_number} contains non-contiguous windows for "
-                        f"chrom_id '{chrom_id}', which would break genome reconstruction."
-                    )
-                seen_chrom_ids.add(chrom_id)
-                current_chrom_id = chrom_id
-                last_chrom_length = chrom_lengths[row_idx]
-                last_chrom_index = chrom_indices[row_idx]
-                last_window_index = -1
-                last_center_start = -1
-                last_center_end = -1
-            else:
-                if chrom_lengths[row_idx] != last_chrom_length:
-                    raise ValueError(
-                        f"Chunk {chunk_number} has inconsistent chrom_length for chrom_id "
-                        f"'{chrom_id}'."
-                    )
-                if chrom_indices[row_idx] != last_chrom_index:
-                    raise ValueError(
-                        f"Chunk {chunk_number} has inconsistent chrom_index for chrom_id "
-                        f"'{chrom_id}'."
-                    )
-
-            if chrom_window_indices[row_idx] <= last_window_index:
-                raise ValueError(
-                    f"Chunk {chunk_number} has non-increasing chrom_window_index "
-                    f"for chrom_id '{chrom_id}'."
-                )
-
-            if center_starts[row_idx] < last_center_start:
-                raise ValueError(
-                    f"Chunk {chunk_number} has decreasing center_start for chrom_id "
-                    f"'{chrom_id}'."
-                )
-
-            if center_starts[row_idx] < last_center_end:
-                clipped_center_end = min(center_ends[row_idx], chrom_lengths[row_idx])
-
-                # The only allowed overlap is the deliberately added terminal
-                # full-length window for genomic records whose tail is shorter than
-                # one model output interval. It must extend coverage to the real
-                # record end; the rebuild step will write only the previously
-                # uncovered tail bases from this final window.
-                if clipped_center_end <= last_center_end or clipped_center_end != chrom_lengths[row_idx]:
-                    raise ValueError(
-                        f"Chunk {chunk_number} has invalid overlapping center intervals "
-                        f"for chrom_id '{chrom_id}'. Only a terminal overlap that "
-                        "extends coverage to chrom_length is allowed."
-                    )
-
-            last_window_index = chrom_window_indices[row_idx]
-            last_center_start = center_starts[row_idx]
-            last_center_end = center_ends[row_idx]
 
     def _build_dataloader(self, datasets) -> DataLoader:
         """Build a robust DataLoader for one tokenized chunk.
@@ -486,7 +360,14 @@ class GenomeAnnotator:
                         "enough output for the requested window configuration."
                     )
                 if model_output_length > center_length:
-                    crop_start = (model_output_length - center_length) // 2
+                    crop_total = model_output_length - center_length
+                    if crop_total % 2 != 0:
+                        raise ValueError(
+                            f"Chunk {chunk_number}: cannot symmetrically crop "
+                            f"model output length {model_output_length} to "
+                            f"center length {center_length}."
+                        )
+                    crop_start = crop_total // 2
                     crop_end = crop_start + center_length
                     strand_full_probs = strand_full_probs[
                         :, :, crop_start:crop_end, :
@@ -502,6 +383,19 @@ class GenomeAnnotator:
                             crop_end,
                         )
                         crop_logged = True
+
+                expected_batch_shape = (
+                    int(input_ids.shape[0]),
+                    PREDICTION_NUM_STRANDS,
+                    center_length,
+                    PREDICTION_NUM_CLASSES,
+                )
+                if tuple(strand_full_probs.shape) != expected_batch_shape:
+                    raise RuntimeError(
+                        f"Chunk {chunk_number}: expected cropped 15-state "
+                        f"probabilities with shape {expected_batch_shape}, got "
+                        f"{tuple(strand_full_probs.shape)}."
+                    )
 
                 gathered_indices = self.accelerator.gather(chunk_local_indices)
                 gathered_full_probs = self.accelerator.gather(strand_full_probs)
@@ -539,6 +433,20 @@ class GenomeAnnotator:
                 f"rows; first missing indices={missing_indices[:10].tolist()}."
             )
 
+        if self.accelerator.is_main_process:
+            expected_chunk_shape = (
+                expected_num_rows,
+                PREDICTION_NUM_STRANDS,
+                center_length,
+                PREDICTION_NUM_CLASSES,
+            )
+            if tuple(ordered_full_probs.shape) != expected_chunk_shape:
+                raise RuntimeError(
+                    f"Chunk {chunk_number}: expected final 15-state "
+                    f"probabilities with shape {expected_chunk_shape}, got "
+                    f"{tuple(ordered_full_probs.shape)}."
+                )
+
         return ordered_full_probs
 
     def process_chromosome(
@@ -548,7 +456,6 @@ class GenomeAnnotator:
         chromosome_writer: Optional[ChromosomePredictionWriter],
     ):
         """Infer one chunk and stream its probabilities to genomic coordinates."""
-        chunk_start = time.monotonic()
         if self.accelerator.is_main_process:
             logger.debug("Processing chunk %d/%d", n, self.num_chunks)
 
@@ -557,6 +464,8 @@ class GenomeAnnotator:
         if not os.path.exists(dataset_path):
             raise FileNotFoundError(f"Cache file for chunk {n} not found: {dataset_path}")
 
+        # These sentinels keep the cleanup block safe when an exception occurs
+        # before one or more resources have been assigned.
         datasets = None
         dataloader = None
         prepared_dataloader = None
@@ -607,11 +516,9 @@ class GenomeAnnotator:
 
             if self.accelerator.is_main_process:
                 logger.info(
-                    "Inference chunk %d/%d completed: windows=%d, elapsed=%.1fs",
+                    "Inference chunk %d/%d completed",
                     n,
                     self.num_chunks,
-                    num_windows,
-                    time.monotonic() - chunk_start,
                 )
         finally:
             # Accelerator keeps references to every prepared DataLoader. Clear
@@ -627,8 +534,6 @@ class GenomeAnnotator:
             gc.collect()
             if torch.cuda.is_available():
                 torch.cuda.empty_cache()
-
-        return
 
     def process(self):
         """Infer all chunks and directly finalize chromosome-level predictions."""
@@ -652,8 +557,6 @@ class GenomeAnnotator:
             if chromosome_writer is not None:
                 chromosome_writer.close()
 
-        return
-
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="PlantGeneAnn v2 distributed annotator.")
@@ -662,7 +565,7 @@ if __name__ == '__main__':
     parser.add_argument("--output_h5_path", required=True, help="Initialized chromosome-level HDF5 temporary path.")
     parser.add_argument("--num_chunks", type=int, required=True, help="Number of tokenized chunks.")
     parser.add_argument("--batch_size", type=int, default=DEFAULT_BATCH_SIZE, help="The number of samples in a batch.")
-    parser.add_argument("--num_workers", type=int, default=DEFAULT_NUM_WORKERS, help="The number of CPU workers used by DataLoader.")
+    parser.add_argument("--num_workers", type=int, required=True, help="Derived DataLoader workers per Accelerate rank.")
     parser.add_argument("-v", "--verbose", action="store_true", help="Enable DEBUG logging.")
     args = parser.parse_args()
 
