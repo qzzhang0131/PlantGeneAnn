@@ -279,8 +279,8 @@ The following end-to-end reference annotation times were measured using **one NV
 
 | Species | Genome Size | Memory Consumption | Runtime |
 |---|---:|---:|---:|
-| *Arabidopsis thaliana* | 138 MB | 9.97 GB | 14.3 min |
-| *Oryza sativa* | 373 MB | 16.72 GB | 37.2 min |
+| *Arabidopsis thaliana* | 138 MB | 9.97 GB | 0.24 h |
+| *Oryza sativa* | 373 MB | 16.72 GB | 0.62 h |
 | *Cannabis sativa* | 744 MB | 18.28 GB | 1.26 h |
 | *Elaeis guineensis* | 1.74 GB | 16.49 GB | 3.01 h |
 | *Papaver somniferum* | 2.57 GB | 18.73 GB | 4.40 h |
