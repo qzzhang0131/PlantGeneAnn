@@ -149,7 +149,7 @@ format_version: 1
 
 window:
   length: 40960
-  overlap: 20480
+  overlap: 8192
   flank_length: 4096
   min_record_length: 32768
   max_non_atcg: 408
@@ -191,7 +191,7 @@ Worker counts are reduced automatically if they exceed the CPUs available to the
 | Key | Default | Meaning |
 |---|---:|---|
 | `window.length` | 40,960 | Genomic bases before adding tokenizer special tokens |
-| `window.overlap` | 20,480 | Overlap between neighboring training windows |
+| `window.overlap` | 8,192 | Overlap between neighboring training windows |
 | `window.flank_length` | 4,096 | Context bases removed from each side before loss; must match the model configuration |
 | `window.min_record_length` | 32,768 | Minimum original FASTA record length eligible for window generation |
 | `window.max_non_atcg` | 408 | Maximum non-ATCG bases accepted in the model center/loss interval |
