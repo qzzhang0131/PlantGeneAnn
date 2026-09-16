@@ -300,7 +300,7 @@ Fine-tuning GPU requirements depend on the selected strategy:
 | Half tuning | 24 GB | RTX 3090 | RTX 4090 |
 | Full tuning | 32 GB | A40 | A800/A100 |
 
-\* Minimum practical VRAM per GPU with `training.train_batch_size=1`; it is not the combined memory of all GPUs. **Multi-GPU parallel fine-tuning is recommended**.
+\* Minimum practical VRAM per GPU with `training.train_batch_size=1`; it is not the combined memory of all GPUs. **Multi-GPU parallel fine-tuning is strongly recommended**.
 
 The workflow consists of:
 
