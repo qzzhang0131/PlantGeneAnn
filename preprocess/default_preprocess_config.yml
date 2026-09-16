@@ -2,10 +2,10 @@ format_version: 1
 
 window:
   length: 40960
-  overlap: 20480
+  overlap: 8192
   flank_length: 4096
   min_record_length: 32768
-  max_non_atcg: 408
+  max_non_atcg: 327
 
 qc:
   gene_biotype_key: gene_biotype
