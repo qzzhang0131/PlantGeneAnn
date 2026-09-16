@@ -349,11 +349,11 @@ start/terminal boundary strategy as inference.
 Default preprocessing geometry:
 
 - window length: 40,960 bp;
-- overlap: 20,480 bp;
+- overlap: 8,192 bp;
 - flank length: 4,096 bp on each side;
 - center/loss interval: 32,768 bp;
-- regular input step: 20,480 bp (capped at the center length to prevent gaps);
-- maximum non-ATCG positions in the center/loss interval: 408;
+- regular input step: 32.768 bp (capped at the center length to prevent gaps);
+- maximum non-ATCG positions in the center/loss interval: 327;
 - labels: `(2, 40960)`;
 - attention/loss mask: `(2, 40960)`.
 
