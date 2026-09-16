@@ -12,6 +12,9 @@
 
 PlantGeneAnn accepts a plant genome in FASTA format and directly produces a standard GFF3 annotation. It does not require RNA-seq alignments, protein homology, or an existing genome annotation.
 
+> [!NOTE]
+> **PlantGeneAnn v2.0** updates the pretrained model weights for angiosperms and also provides adapted pretrained weights for bryophyta and chlorophyta, yielding a certain performance improvement over v1.5..
+
 ## 📑 Table of Contents
 
 - [🗂️ Repository Structure](#-repository-structure)
