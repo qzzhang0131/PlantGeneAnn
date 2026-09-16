@@ -104,7 +104,7 @@ PlantGeneAnn v2 provides three clade-specific pretrained checkpoints:
 | `chlorophyta` | [`qzzhang/PlantGeneAnn-v2-Chlorophyta`](https://huggingface.co/qzzhang/PlantGeneAnn-v2-Chlorophyta/tree/main) | Chlorophyta (green algae) | `models/PlantGeneAnn-v2-Chlorophyta` |
 
 > [!NOTE]
-> The Chlorophyta model is currently a development version.
+> The chlorophyta model is currently a development version.
 
 The downloader tries [Hugging Face](https://huggingface.co/) first, falls back to [HF Mirror](https://hf-mirror.com/) when needed, and validates every downloaded model. If no `--model_type` is supplied, only the Angiospermae checkpoint is downloaded.
 
