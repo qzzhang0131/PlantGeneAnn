@@ -275,7 +275,7 @@ PlantGeneAnn inference requires an **NVIDIA GPU with Ampere architecture or newe
 
 ## ⏱️ Runtime & Memory Consumption
 
-The following end-to-end reference times were measured using **one NVIDIA RTX 4090 GPU** and **18 vCPU cores from an AMD EPYC 9754**.
+The following end-to-end reference annotation times were measured using **one NVIDIA RTX 4090 GPU** and **18 vCPU cores from an AMD EPYC 9754**.
 
 | Species | Genome Size | Memory Consumption | Runtime |
 |---|---:|---:|---:|
