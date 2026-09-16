@@ -352,7 +352,7 @@ Default preprocessing geometry:
 - overlap: 8,192 bp;
 - flank length: 4,096 bp on each side;
 - center/loss interval: 32,768 bp;
-- regular input step: 32.768 bp (capped at the center length to prevent gaps);
+- regular input step: 32,768 bp;
 - maximum non-ATCG positions in the center/loss interval: 327;
 - labels: `(2, 40960)`;
 - attention/loss mask: `(2, 40960)`.
