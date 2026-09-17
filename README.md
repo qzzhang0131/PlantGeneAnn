@@ -124,7 +124,7 @@ python fetch_model_weights.py --model_type chlorophyta
 python fetch_model_weights.py --model_type all
 python fetch_model_weights.py --model_type all --model_dir /path/to/models
 
-# Optional: choose an endpoint, output directory, or fresh download
+# Optional: choose output directory or fresh download
 python fetch_model_weights.py --model_dir /path/to/PlantGeneAnn-model
 python fetch_model_weights.py --force
 ```
