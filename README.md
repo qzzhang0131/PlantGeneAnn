@@ -95,6 +95,13 @@ Download the default (Angiospermae) checkpoint with:
 python fetch_model_weights.py
 ```
 
+If your server cannot access the [Hugging Face](https://huggingface.co/) website and the download fails,
+switch to the [HF Mirror](https://hf-mirror.com/) endpoint:
+
+```bash
+python fetch_model_weights.py --endpoint mirror
+```
+
 PlantGeneAnn v2 provides three clade-specific pretrained checkpoints:
 
 | `--model_type` | Hugging Face repository | Adapted plant group | Default local directory |
@@ -106,7 +113,8 @@ PlantGeneAnn v2 provides three clade-specific pretrained checkpoints:
 > [!NOTE]
 > The chlorophyta model is currently a development version.
 
-The downloader tries [Hugging Face](https://huggingface.co/) first, falls back to [HF Mirror](https://hf-mirror.com/) when needed, and validates every downloaded model. If no `--model_type` is supplied, only the Angiospermae checkpoint is downloaded.
+The downloader validates every downloaded model. If no `--model_type` is
+supplied, only the Angiospermae checkpoint is downloaded.
 
 ```bash
 # Select a clade, or download all three checkpoints
@@ -117,7 +125,6 @@ python fetch_model_weights.py --model_type all
 python fetch_model_weights.py --model_type all --model_dir /path/to/models
 
 # Optional: choose an endpoint, output directory, or fresh download
-python fetch_model_weights.py --endpoint mirror
 python fetch_model_weights.py --model_dir /path/to/PlantGeneAnn-model
 python fetch_model_weights.py --force
 ```
