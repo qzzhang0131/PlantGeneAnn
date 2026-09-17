@@ -122,7 +122,7 @@ python fetch_model_weights.py --model_type angiospermae
 python fetch_model_weights.py --model_type bryophyta
 python fetch_model_weights.py --model_type chlorophyta
 python fetch_model_weights.py --model_type all
-python fetch_model_weights.py --model_type all --model_dir /path/to/models
+python fetch_model_weights.py --model_type all --endpoint mirror
 
 # Optional: choose output directory or fresh download
 python fetch_model_weights.py --model_dir /path/to/PlantGeneAnn-model
