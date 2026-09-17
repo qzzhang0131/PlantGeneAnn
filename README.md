@@ -170,7 +170,7 @@ python run_annotator.py \
 | `-c`, `--num_cpu_threads` | available CPU affinity | Total CPU-thread budget for the pipeline |
 | `--chunk_size` | 3,200 | Number of sequence windows in each inference chunk; not a length in bp |
 | `--batch_size` | 16 | Per-process GPU inference batch size |
-| `--num_processes` | visible GPUs | Number of Accelerate inference processes |
+| `--num_processes` | all visible GPUs | Number of Accelerate inference processes |
 | `--cache_path` | `auto` | Cache directory; automatic caches are deleted after use |
 | `--min_chromosome_size` | 40,960 | Skip FASTA records shorter than this number of bases |
 | `--min_intron_length` | 20 | Hard minimum intron length accepted by SMM decoding |
