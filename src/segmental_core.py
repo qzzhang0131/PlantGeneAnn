@@ -1,4 +1,4 @@
-"""Pure strict 15-state segmental weighted-DAG decoding algorithms.
+"""Pure strict 15-state segmental SMM decoding algorithms.
 
 This module contains no chromosome HDF5 traversal, FASTA I/O, process-pool
 orchestration, or GFF3 serialization. It decodes one transcript-oriented
