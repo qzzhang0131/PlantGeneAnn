@@ -48,7 +48,7 @@ def _build_config(args: argparse.Namespace, cache_path: str) -> PipelineConfig:
 
 
 def _run_pipeline(args, cache_path: str, annotator_script: str) -> None:
-    """Execute inference followed by strict 15-state segmental decoding."""
+    """Execute inference followed by strict 15-state segmental SMM decoding."""
 
     annotator_config = _build_config(args, cache_path)
     prediction_h5 = run_prediction_stage(
