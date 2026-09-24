@@ -308,7 +308,7 @@ Fine-tuning GPU requirements depend on the selected strategy:
 | Full tuning | 32 GB | A40 | A800/A100 |
 
 > [!NOTE]
-> \* Minimum practical VRAM per GPU with `training.train_batch_size=1`; it is not the combined memory of all GPUs. **Multi-GPU parallel fine-tuning is strongly recommended**.
+> **\*** Minimum practical VRAM per GPU with `training.train_batch_size=1`; it is not the combined memory of all GPUs. **Multi-GPU parallel fine-tuning is strongly recommended**.
 
 The workflow consists of:
 
