@@ -276,7 +276,7 @@ The following hardware configuration applies to **PlantGeneAnn inference**:
 | CUDA | 12.1 | 12.1 |
 | GPU | NVIDIA RTX 3060 | NVIDIA RTX 4090 |
 | CPU | Intel/AMD ≥ 4-core CPU | Intel/AMD 16-core CPU |
-| System Memory | 32 GB | 48 GB |
+| System Memory | 32 GB | ≥ 32 GB |
 
 PlantGeneAnn inference requires an **NVIDIA GPU with Ampere architecture or newer**, e.g., RTX 30-series, RTX 40-series, NVIDIA A40/A100, or NVIDIA L20/H20/H100. The minimum RTX 3060 and recommended RTX 4090 both meet this requirement. The inference pipeline uses BF16 mixed precision by default. CPU resources are used for FASTA indexing, sequence extraction, tokenization, DataLoader workers, candidate-region scanning, and SMM decoding.
 
