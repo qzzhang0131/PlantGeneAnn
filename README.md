@@ -1,6 +1,6 @@
 # 🌱 PlantGeneAnn: Plant Gene Annotator
 
-[![Python](https://img.shields.io/badge/Python-3.8-blue.svg)](https://www.python.org/)
+[![Python](https://img.shields.io/badge/Python-3.10-blue.svg)](https://www.python.org/)
 [![PyTorch](https://img.shields.io/badge/PyTorch-2.2.2-ee4c2c.svg)](https://pytorch.org/)
 [![Transformers](https://img.shields.io/badge/%F0%9F%A4%97%20Transformers-4.38.1-yellow.svg)](https://huggingface.co/docs/transformers/)
 [![CUDA](https://img.shields.io/badge/CUDA-12.1-76B900.svg)](https://developer.nvidia.com/cuda-toolkit)
@@ -62,7 +62,7 @@ PlantGeneAnn requires Linux, an NVIDIA CUDA GPU, and CUDA extensions provided by
 # 1. Clone the repository and create the environment
 git clone https://github.com/qzzhang0131/PlantGeneAnn.git
 cd PlantGeneAnn
-conda create -n PlantGeneAnn python=3.8 -y
+conda create -n PlantGeneAnn python=3.10 -y
 conda activate PlantGeneAnn
 
 # 2. Install the CUDA toolkit and Python dependencies
