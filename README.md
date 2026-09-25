@@ -102,7 +102,7 @@ If your server/workstation cannot access the [Hugging Face](https://huggingface.
 python fetch_model_weights.py --endpoint mirror
 ```
 
-PlantGeneAnn v2 provides three clade-specific pretrained checkpoints:
+PlantGeneAnn-v2.0 provides three clade-specific pretrained checkpoints:
 
 | `--model_type` | Hugging Face repository | Adapted plant group | Default local directory |
 |---|---|---|---|
