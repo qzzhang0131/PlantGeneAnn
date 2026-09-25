@@ -95,7 +95,7 @@ Download the default (Angiospermae) checkpoint with:
 python fetch_model_weights.py
 ```
 
-If your server cannot access the [Hugging Face](https://huggingface.co/) website and the download fails,
+If your server/workstation cannot access the [Hugging Face](https://huggingface.co/) website and the download fails,
 **switch to the [HF Mirror](https://hf-mirror.com/) endpoint:**
 
 ```bash
