@@ -284,7 +284,7 @@ PlantGeneAnn inference requires an **NVIDIA GPU with Ampere architecture or newe
 
 The following end-to-end reference annotation times were measured using **one NVIDIA RTX 4090 GPU** and **18 vCPU cores from an AMD EPYC 9754**.
 
-| Species | Genome Size | Memory Consumption | Runtime |
+| Species | Genome Size | Peak System Memory | Runtime |
 |---|---:|---:|---:|
 | *Arabidopsis thaliana* | 138 MB | 9.97 GB | 0.24 h |
 | *Oryza sativa* | 373 MB | 16.72 GB | 0.62 h |
@@ -293,7 +293,7 @@ The following end-to-end reference annotation times were measured using **one NV
 | *Papaver somniferum* | 2.57 GB | 18.73 GB | 4.40 h |
 | *Hordeum vulgare* | 3.98 GB | 13.19 GB | 6.81 h |
 
-Runtime and memory consumption depends on the number and length of FASTA records, storage throughput, CPU allocation, GPU/CPU model, and the number of candidate regions processed during SMM decoding. These values are reference measurements rather than guaranteed runtimes and memory consumptions.
+Runtime and peak system memory consumption depends on the number and length of FASTA records, storage throughput, CPU allocation and the GPU/CPU model. These values are reference measurements rather than guaranteed runtimes and memory consumptions.
 
 ## 🎛️ Custom Fine-tuning
 
