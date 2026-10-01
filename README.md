@@ -292,7 +292,7 @@ The following end-to-end reference annotation times were measured using **one NV
 | *Arabidopsis thaliana* | 138 MB | 9.97 GB | 0.24 h |
 | *Oryza sativa* | 373 MB | 16.72 GB | 0.62 h |
 | *Cannabis sativa* | 744 MB | 18.28 GB | 1.26 h |
-| *Zea mays* | 2.06 GB | 13.83 GB | 3.44 h |
+| *Zea mays* | 2.06 GB | 16.45 GB | 3.44 h |
 | *Papaver somniferum* | 2.57 GB | 18.73 GB | 4.40 h |
 | *Hordeum vulgare* | 3.98 GB | 13.19 GB | 6.81 h |
 
