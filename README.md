@@ -283,7 +283,7 @@ The following hardware configuration applies to **PlantGeneAnn inference**:
 
 PlantGeneAnn inference requires an **NVIDIA GPU with Ampere architecture or newer**, e.g., RTX 30-series, RTX 40-series, NVIDIA A40/A100, or NVIDIA L20/H20/H100. The minimum RTX 3060 and recommended RTX 4090 both meet this requirement. The inference pipeline uses BF16 mixed precision by default. CPU resources are used for FASTA indexing, sequence extraction, tokenization, DataLoader workers, candidate-region scanning, and SMM decoding.
 
-## ⏱️ Runtime & Memory Consumption
+## ⏱️ Runtime & Memory Usage
 
 The following end-to-end reference annotation times were measured using **one NVIDIA RTX 4090 GPU** and **18 vCPU cores from an AMD EPYC 9754**.
 
@@ -296,7 +296,7 @@ The following end-to-end reference annotation times were measured using **one NV
 | *Papaver somniferum* | 2.57 GB | 18.73 GB | 4.40 h |
 | *Hordeum vulgare* | 3.98 GB | 13.19 GB | 6.81 h |
 
-Runtime and peak system memory consumption depends on the number and length of FASTA records, storage throughput, CPU allocation and the GPU/CPU model. These values are reference measurements rather than guaranteed runtimes and memory consumptions.
+Runtime and peak system memory usage depends on the number and length of FASTA records, storage throughput, CPU allocation and the GPU/CPU model. These values are reference measurements rather than guaranteed runtimes and peak memory usage.
 
 ## 🎛️ Custom Fine-tuning
 
