@@ -276,6 +276,7 @@ The following hardware configuration applies to **PlantGeneAnn inference**:
 | Requirement | Minimum | Recommended |
 |---|---|---|
 | OS | Linux (x86-64) | Linux (x86-64) |
+| Python | 3.8 | 3.10 |
 | CUDA | 12.1 | 12.1 |
 | GPU | NVIDIA RTX 3060 | NVIDIA RTX 4090 |
 | CPU | Intel/AMD ≥ 4-core CPU | Intel/AMD 16-core CPU |
