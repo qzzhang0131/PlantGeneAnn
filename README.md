@@ -66,7 +66,7 @@ conda create -n PlantGeneAnn python=3.10 -y
 conda activate PlantGeneAnn
 
 # 2. Install the CUDA toolkit
-# Note: Skip this step if CUDA toolkit 12.1 is already available in the environment.
+# Note: skip this step if CUDA toolkit 12.1 is already available in the environment.
 conda install -c nvidia -c conda-forge cuda-toolkit=12.1.0 libxcrypt -y
 
 # 3. Install Python dependencies
