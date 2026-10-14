@@ -420,16 +420,16 @@ For PEFT and half tuning, `best/peft/` is an archival trainable-weight bundle, w
 
 If you use PlantGeneAnn in your research, please cite our preprint:
 
-> Zhang, Q., Zhang, Z., Lin, K., Wang, J., Deng, K., Xiang, X., Xu, W., & Hu, X. (2026). PlantGeneAnn: a strand-specific genome foundation model for ab initio gene structure annotation of plant genomes. *bioRxiv*. https://doi.org/10.64898/2026.06.25.733695
+> Zhang, Q., Zhang, Z., Lin, K., Wang, J., Deng, K., Xu, W., Yang, Q.-Y., & Hu, X. (2026). PlantGeneAnn: a high-accuracy ab initio plant gene annotation tool fine-tuned from a genome foundation model. *bioRxiv*. https://www.biorxiv.org/content/10.64898/2026.06.25.733695v2
 
 ```bibtex
 @article{zhang2026plantgeneann,
-  title={PlantGeneAnn: a strand-specific genome foundation model for ab initio gene structure annotation of plant genomes},
-  author={Zhang, Qizhe and Zhang, Zhengyang and Lin, Kepeng and Wang, Jing and Deng, Kaixuan and Xiang, Xianglei and Xu, Wei and Hu, Xuehai},
+  title={PlantGeneAnn: a high-accuracy ab initio plant gene annotation tool fine-tuned from a genome foundation model},
+  author={Zhang, Qizhe and Zhang, Zhengyang and Lin, Kepeng and Wang, Jing and Deng, Kaixuan and Xu, Wei and Yang, Qing-Yong and Hu, Xuehai},
   journal={bioRxiv},
   year={2026},
   doi={10.64898/2026.06.25.733695},
-  url={https://doi.org/10.64898/2026.06.25.733695}
+  url={https://www.biorxiv.org/content/10.64898/2026.06.25.733695v2}
 }
 ```
 
