@@ -5,7 +5,7 @@
 [![Transformers](https://img.shields.io/badge/%F0%9F%A4%97%20Transformers-4.38.1-yellow.svg)](https://huggingface.co/docs/transformers/)
 [![CUDA](https://img.shields.io/badge/CUDA-12.1-76B900.svg)](https://developer.nvidia.com/cuda-toolkit)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-[![bioRxiv](https://img.shields.io/badge/bioRxiv-10.64898%2F2026.06.25.733695-b31b1b.svg)](https://doi.org/10.64898/2026.06.25.733695)
+[![bioRxiv](https://img.shields.io/badge/bioRxiv-10.64898%2F2026.06.25.733695-b31b1b.svg)](https://www.biorxiv.org/content/10.64898/2026.06.25.733695v2)
 [![Hugging Face](https://img.shields.io/badge/%F0%9F%A4%97%20Model-PlantGeneAnn--v2--Angiospermae-FFD21E.svg)](https://huggingface.co/qzzhang/PlantGeneAnn-v2-Angiospermae/tree/main)
 
 **PlantGeneAnn** (**Plant** **Gene** **Ann**otator) is a tool for accurate ***ab initio* protein-coding gene structure annotation in plant genomes**. It automatically predicts nucleotide-level gene states on both genomic strands **using a genome foundation model (GFM)** and converts these predictions into biologically valid gene models through **semi-Markov model (SMM)** decoding.
